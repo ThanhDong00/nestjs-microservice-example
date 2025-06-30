@@ -1,0 +1,28 @@
+###
+# @name createUser
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "username": "coder_man",
+  "email": "coder@example.com"
+}
+
+###
+# @name createPost
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+    "title": "My New Code Snippet",
+    "content": "This is a great code example.",
+    "authorId": 3
+}
+
+###
+# @name getPosts
+GET http://localhost:3000/posts
+
+###
+# @name getPostById
+GET http://localhost:3000/posts/3
