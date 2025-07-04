@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
-import { ApiGatewayService } from './api-gateway.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 
@@ -9,11 +17,6 @@ export class ApiGatewayController {
     @Inject('USER_SERVICE') private readonly userServiceClient: ClientProxy,
     @Inject('POST_SERVICE') private readonly postServiceClient: ClientProxy,
   ) {}
-
-  // @Get()
-  // getHello(): string {
-  //   return this.apiGatewayService.getHello();
-  // }
 
   // --- Users Endpoints ---
   @Post('users')
@@ -64,6 +67,36 @@ export class ApiGatewayController {
     // Gửi tin nhắn đến Post Service
     return await lastValueFrom(
       this.postServiceClient.send('get_post_by_id', postId),
+    );
+  }
+
+  @Put('posts/:id')
+  async updatePost(
+    @Param('id') id: string,
+    @Body() data: { title: string; content: string; authorId: number },
+  ) {
+    const postId = parseInt(id, 10);
+    if (isNaN(postId)) {
+      return { error: 'Invalid post ID' };
+    }
+    // Gửi tin nhắn đến Post Service
+    return await lastValueFrom(
+      this.postServiceClient.send('update_post', {
+        postId,
+        updateData: data,
+      }),
+    );
+  }
+
+  @Delete('posts/:id')
+  async deletePost(@Param('id') id: string) {
+    const postId = parseInt(id, 10);
+    if (isNaN(postId)) {
+      return { error: 'Invalid post ID' };
+    }
+    // Gửi tin nhắn đến Post Service
+    return await lastValueFrom(
+      this.postServiceClient.send('delete_post', postId),
     );
   }
 }

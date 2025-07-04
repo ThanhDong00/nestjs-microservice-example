@@ -26,3 +26,14 @@ GET http://localhost:3000/posts
 ###
 # @name getPostById
 GET http://localhost:3000/posts/3
+
+###
+# @name updatePost
+PUT http://localhost:3000/posts/3
+Content-Type: application/json
+
+{
+  "title": "Updated Code Snippet",
+  "content": "This is an updated code example.",
+  "authorId": 3
+}
